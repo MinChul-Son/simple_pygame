@@ -42,6 +42,18 @@ enemy_x_pos = (screen_width / 2) -(enemy_width/2) # 화면 가로의 절반 크�
 enemy_y_pos = (screen_height/2) -(enemy_height/2) #화면 세로 크기 가장 아래에 해당하는 곳에 위치
 
 
+# 폰트 정의
+game_font = pygame.font.Font(None, 40) # 폰트 객체 생성 (폰트, 크기)
+
+
+# 총 시간
+total_time = 10
+
+# 시작 시간 
+start_ticks = pygame.time.get_ticks() # 시작 tick을 받아옴.
+
+
+
 #이벤트루프가 실행되고 있어야 호출된 창이 꺼지지 않는다.
 # 이벤트 루프
 running = True # 게임이 진행중인가를 확인하는 변수
@@ -103,8 +115,24 @@ while running:
 
     screen.blit(enemy,(enemy_x_pos,enemy_y_pos))
 
+    # 타이머 집어 넣기
+    # 경과 시간 계산
+    elapsed_time = (pygame.time.get_ticks() - start_ticks) / 1000 #밀리 세컨드 이기때문에 초로 환산하기위해 1000으로 나눔
+
+    # 출력할 글자, True, 글자 색상
+    timer = game_font.render(str(int(total_time - elapsed_time)), True, (255,255,255))
+    screen.blit(timer, (10,10))
+
+    # 만약 시간이 0 이하이면 게임 종료
+    if total_time - elapsed_time <=0:
+        print("Time Over!")
+        running = False
+
+
     pygame.display.update() #매 프레임마다 다시 그려줌 (자바gui할때 쓰던 repaint랑 같은 개념인듯)
 
+# 잠시 대기 dummy code
+pygame.time.delay(2000) # 2초 정도 대기
 
 #pygame 종료
 pygame.quit()
